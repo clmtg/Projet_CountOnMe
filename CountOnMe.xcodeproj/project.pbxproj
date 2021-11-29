@@ -15,6 +15,7 @@
 		1FA43BE8224E569A00F565CB /* SimpleCalcTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA43BE7224E569A00F565CB /* SimpleCalcTests.swift */; };
 		1FA43BF3224E569A00F565CB /* SimpleCalcUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FA43BF2224E569A00F565CB /* SimpleCalcUITests.swift */; };
 		EB1848992750D85500919948 /* coreCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB1848982750D85500919948 /* coreCalculator.swift */; };
+		EB5069802754DC250057367D /* calculatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB50697F2754DC250057367D /* calculatorDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		1FA43BF2224E569A00F565CB /* SimpleCalcUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleCalcUITests.swift; sourceTree = "<group>"; };
 		1FA43BF4224E569A00F565CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB1848982750D85500919948 /* coreCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = coreCalculator.swift; sourceTree = "<group>"; };
+		EB50697F2754DC250057367D /* calculatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calculatorDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 		1FA43BD1224E569900F565CB /* CountOnMe */ = {
 			isa = PBXGroup;
 			children = (
+				EB50697E2754DBDD0057367D /* ProtocolsExtensions */,
 				EB1848972750D39500919948 /* SupportingFiles */,
 				EB1848962750D38C00919948 /* Controller */,
 				EB1848952750D38400919948 /* View */,
@@ -158,6 +161,14 @@
 				1FA43BDE224E569A00F565CB /* Info.plist */,
 			);
 			path = SupportingFiles;
+			sourceTree = "<group>";
+		};
+		EB50697E2754DBDD0057367D /* ProtocolsExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				EB50697F2754DC250057367D /* calculatorDelegate.swift */,
+			);
+			path = ProtocolsExtensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB5069802754DC250057367D /* calculatorDelegate.swift in Sources */,
 				1FA43BD5224E569900F565CB /* ViewController.swift in Sources */,
 				1FA43BD3224E569900F565CB /* AppDelegate.swift in Sources */,
 				EB1848992750D85500919948 /* coreCalculator.swift in Sources */,
