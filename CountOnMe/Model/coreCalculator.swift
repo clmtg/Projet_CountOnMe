@@ -57,23 +57,28 @@ class coreCalculator {
     
     //Func to add operator to calcul expression
     func addOperator(_ operatorCalcul: String) {
-        if canAddOperator {
-            calculText.append(" \(operatorCalcul) ")
-        }
-        else {
+        if !canAddOperator {
             delegate?.receiveAlert("Operator error", "The operator \(operatorCalcul) can't be added here")
-            
+            return
         }
+        
+        if expressionHaveResult {
+            calculText = elements.last!
+        }
+        
+        calculText.append(" \(operatorCalcul) ")
     }
     
     //Func to provide result
     func calculResult() {
         if !expressionIsCorrect {
             delegate?.receiveAlert("Result error", "The calcul expression is invalide. Please make sure to enter a valid calcul.")
+            return
         }
         
         if !expressionHaveEnoughElement {
-            delegate?.receiveAlert("Result error", "There is not enough element to make a calcule")
+            delegate?.receiveAlert("Result error", "There is not enough element to make a calcul.")
+            return
         }
         
         // Create local copy of operations

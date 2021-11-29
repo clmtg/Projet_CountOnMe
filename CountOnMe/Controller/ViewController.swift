@@ -40,11 +40,11 @@ class ViewController: UIViewController {
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         core.calculResult()
     }
-
 }
 
 // MARK: - Extensions and Protocols
 extension ViewController: CalculatorDelegate {
+    
     func receiveAlert(_ coreAlertTitle: String, _ coreAlertText: String) {
         let alertVC = UIAlertController(title: coreAlertTitle, message: coreAlertText, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
