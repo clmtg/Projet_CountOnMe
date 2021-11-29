@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     // MARK: View Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        core.delegate = self
     }
     
     // MARK: - IBAction
@@ -31,60 +31,24 @@ class ViewController: UIViewController {
     
     @IBAction func tappedAdditionButton(_ sender: UIButton) {
         core.addOperator(sender.title(for: .normal)!)
-        
-        /*
-        
-        else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
-        }
-        
-        
-        */
-        
     }
     
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
         core.addOperator(sender.title(for: .normal)!)
-        
-        /* else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Un operateur est déja mis !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.present(alertVC, animated: true, completion: nil)
-        }
-         
-         */
     }
 
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        /*
-        guard expressionIsCorrect else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Entrez une expression correcte !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            return self.present(alertVC, animated: true, completion: nil)
-        }
-        
-        guard expressionHaveEnoughElement else {
-            let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul !", preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            return self.present(alertVC, animated: true, completion: nil)
-        }
-        */
-        
         core.calculResult()
     }
 
 }
 
 // MARK: - Extensions and Protocols
-
-//ViewController MUST respect calculatorDelegate protocol (function listed in protocol MUST be implemented into ViewController)
-
-// Are protocols classes ? Therefore can be used as extensions
-
-extension ViewController:calculatorDelegate {
-    func receiveAlert(_ coreAlert: String) {
+extension ViewController: CalculatorDelegate {
+    func receiveAlert(_ coreAlertTitle: String, _ coreAlertText: String) {
+        let alertVC = UIAlertController(title: coreAlertTitle, message: coreAlertText, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        return self.present(alertVC, animated: true, completion: nil)
     }
     
     func receiveResult(_ coreResult: String) {

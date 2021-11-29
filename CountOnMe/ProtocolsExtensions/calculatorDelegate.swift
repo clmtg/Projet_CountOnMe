@@ -8,8 +8,8 @@
 
 import Foundation
 
-protocol calculatorDelegate {
+protocol CalculatorDelegate: AnyObject {
     func receiveResult(_ coreResult: String)
-    func receiveAlert(_ coreAlert: String)
+    func receiveAlert(_ coreAlertTitle: String, _ coreAlertText: String)
 
 }
