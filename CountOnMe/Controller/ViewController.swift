@@ -36,6 +36,14 @@ class ViewController: UIViewController {
     @IBAction func tappedSubstractionButton(_ sender: UIButton) {
         core.addOperator(sender.title(for: .normal)!)
     }
+    
+    @IBAction func tappedMultiplicationButtonButton(_ sender: UIButton) {
+        core.addOperator(sender.title(for: .normal)!)
+    }
+    
+    @IBAction func tappedDivisionButton(_ sender: UIButton) {
+        core.addOperator(sender.title(for: .normal)!)
+    }
 
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         core.calculResult()

@@ -105,10 +105,17 @@ class coreCalculatorTest: XCTestCase {
         XCTAssert(calculator.calculText == "4 - 2 = 2")
     }
     
-    func testGivenCalculIsWithUnknowOperator_WhenResultIsRequested_FatalErrorIsTriggered(){
-        calculator.calculText = "4 / 2"
+    // MARK: - Tests related to division
+    func testGivenElementOneIsGreaterThanElementTwo_WhenDivision_ThenResultIsCorrect(){
+        calculator.calculText = "8 ÷ 2"
         calculator.calculResult()
-        XCTAssert(calculator.calculText == "4 / 2")
+        XCTAssert(calculator.calculText == "8 ÷ 2 = 4")
+    }
+    
+    func testGivenElementTwoIsGreaterThanElementOne_WhenDivision_ThenResultIsCorrect(){
+        calculator.calculText = "4 ÷ 8"
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "4 ÷ 8 = 0.5")
     }
     
 }
