@@ -1,10 +1,8 @@
 # Projet_CountOnMe
-## A old fashioned calculator in your pocket
-Instagrid est une application iPhone permettant aux utilisateurs de combiner des photos en choisissant parmi plusieurs dispositions. Le résultat final est au format carré et partageable avec ses amis.
-
-![](./screenshotReadmeMD.jpeg)
+## An old fashioned calculator in your pocket
+Have you ever thought that calculators are boring ?! Time where despite using one you had to double check the result manually…
+With the CountOnMe project, you'll feel the nostalgia of an old fashion calculator, directly right out of your pocket.
+2021, time to be old school again.
 
 ## Additional information
 - Support of **iPhone SE to iPhone 13 Pro Max**
-- Support **Dark Mode** for a great viewing experience in low-light environments
-- Three different grid layouts
