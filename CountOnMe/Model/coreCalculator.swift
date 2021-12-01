@@ -18,6 +18,7 @@ class coreCalculator {
         }
     }
     
+    //Use to link the model and the view
     weak var delegate: CalculatorDelegate?
     
     //Items making calcul ("4 + 5" (3 items))
@@ -96,16 +97,32 @@ class coreCalculator {
             case "+": result = left + right
             case "-": result = left - right
             case "x": result = left * right
-            case "÷": result = left / right
+            case "÷":
+                if right == 0 {
+                    delegate?.receiveAlert("Calcul error", "Can not process a division by zero.")
+                    return
+                }
+                else {
+                    result = left / right
+                }
             default: fatalError("Unknown operator !")
             }
             
+
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(result)", at: 0)
+            operationsToReduce.insert("\(resultIntDoubleCheck().string(from: NSNumber(value: result))!)", at: 0)
             
         }
         
         calculText.append(" = \(operationsToReduce.first!)")
         
+    }
+    
+    //Function to convert number to correct format ("2 + 2 = 4" -> Correct. "2 + 2 = 4.0" -> Wrong. )
+    private func resultIntDoubleCheck() -> NumberFormatter {
+        let numberConvertor = NumberFormatter()
+        numberConvertor.minimumIntegerDigits = 1
+        numberConvertor.maximumFractionDigits = 2
+        return numberConvertor
     }
 }

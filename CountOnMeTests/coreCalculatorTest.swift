@@ -118,4 +118,10 @@ class coreCalculatorTest: XCTestCase {
         XCTAssert(calculator.calculText == "4 ÷ 8 = 0.5")
     }
     
+    func testGivenElementTwoIsZero_WhenDivision_ThenResultIsNotProcesses(){
+        calculator.calculText = "4 ÷ 0"
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "4 ÷ 0")
+    }
+    
 }
