@@ -36,6 +36,11 @@ class coreCalculator {
         return elements.count >= 3
     }
     
+    // Does calcul expression have at least 3 items
+    var expressionHasResult: Bool {
+        return calculText.contains("=")
+    }
+    
     // Can an operation (+/-) be added at the end of the current calcul expression ? Does the current calcul finish with +/- already ?
     var canAddOperator: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
@@ -51,8 +56,13 @@ class coreCalculator {
     //Func to add a number to current calcul. If the calcul does have a result already, clearing calcul expression
     func addNumberToCalcul(_ number: String){
         if expressionHaveResult {
+            resetCalcul()
+        }
+        
+        if calculText == "0" {
             calculText = ""
         }
+        
         calculText.append(number)
     }
     
@@ -62,13 +72,12 @@ class coreCalculator {
             delegate?.receiveAlert("Operator error", "The operator \(operatorCalcul) can't be added here")
             return
         }
-        
+
         if expressionHaveResult {
             calculText = elements.last!
         }
         
         calculText.append(" \(operatorCalcul) ")
-        
     }
     
     //Func to provide result
@@ -80,6 +89,11 @@ class coreCalculator {
         
         if !expressionHaveEnoughElement {
             delegate?.receiveAlert("Result error", "There is not enough element to make a calcul.")
+            return
+        }
+        
+        if expressionHasResult {
+            delegate?.receiveAlert("Result error", "A result has been provided already")
             return
         }
         
@@ -110,7 +124,7 @@ class coreCalculator {
             
 
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(resultIntDoubleCheck().string(from: NSNumber(value: result))!)", at: 0)
+            operationsToReduce.insert("\(resultIntDoubleCheck.string(from: NSNumber(value: result))!)", at: 0)
             
         }
         
@@ -118,11 +132,15 @@ class coreCalculator {
         
     }
     
+    func resetCalcul(){
+        calculText = "0"
+    }
+    
     //Function to convert number to correct format ("2 + 2 = 4" -> Correct. "2 + 2 = 4.0" -> Wrong. )
-    private func resultIntDoubleCheck() -> NumberFormatter {
+    private var resultIntDoubleCheck: NumberFormatter = {
         let numberConvertor = NumberFormatter()
         numberConvertor.minimumIntegerDigits = 1
         numberConvertor.maximumFractionDigits = 2
         return numberConvertor
-    }
+    }()
 }

@@ -18,6 +18,7 @@ import XCTest
 
 class coreCalculatorTest: XCTestCase {
     
+    
     var calculator: coreCalculator!
     
     override func setUp() {
@@ -25,29 +26,55 @@ class coreCalculatorTest: XCTestCase {
         calculator = coreCalculator()
     }
     
+    private func setCalculExpression(_ calculToSet: String){
+        let elements = calculToSet.split(separator: " ").map { "\($0)" }
+        let digitsCharacters = CharacterSet.decimalDigits
+        
+        for item in elements {
+            if CharacterSet(charactersIn: item).isSubset(of: digitsCharacters) {
+                calculator.addNumberToCalcul(item)
+            }
+            else {
+                calculator.addOperator(item)
+            }
+        }
+    }
+    
     // MARK: - Tests for AddingNumber
     
     func testGivenCalculExpressionisEmpty_WhenAddingNumberToCalcul_ThenCalculIsNotEmpty(){
-        calculator.calculText = ""
         calculator.addNumberToCalcul("5")
         XCTAssert(calculator.calculText != "")
         XCTAssert(calculator.elements.count == 1)
     }
     
     func testGivenCalculHasNumberOnly_WhenAddingNumberToCalcul_ThenNewNumberIsAppendedOnly(){
-        calculator.calculText = "5"
+        setCalculExpression("5")
         calculator.addNumberToCalcul("6")
         XCTAssert(calculator.calculText == "56")
     }
     
     func testGivenCalculHasNumberAndOperator_WhenAddingNumberToCalcul_ThenNewNumberIsAppendedToLast(){
-        calculator.calculText = "5 + 6"
+        calculator.addNumberToCalcul("5")
+        calculator.addOperator("+")
+        calculator.addNumberToCalcul("6")
+        
         calculator.addNumberToCalcul("7")
         XCTAssert(calculator.calculText == "5 + 67")
+        
     }
     
     func testGivenCalculHasNumberAndOperatorAndResult_WhenAddingNumberToCalcul_ThenCalculIsNewNumberOnly(){
-        calculator.calculText = "5 + 6 = 11"
+        setCalculExpression("5 + 6")
+        calculator.calculResult()
+        
+        calculator.addNumberToCalcul("7")
+        XCTAssert(calculator.calculText == "7")
+    }
+    
+    func testGivenCalculIsEmpty_WhenAddingNumberToCalcul_ThenCalculIsAddedNumberOnly(){
+        calculator.resetCalcul()
+        
         calculator.addNumberToCalcul("7")
         XCTAssert(calculator.calculText == "7")
     }
@@ -56,72 +83,114 @@ class coreCalculatorTest: XCTestCase {
     // MARK: - Tests for AddingOperator
     
     func testGivenCalculHasNoNumber_WhenAddingOperator_ThenOperatorIsAppendedOnly(){
-        calculator.calculText = ""
         calculator.addOperator("-")
         XCTAssert(calculator.calculText == " - ")
     }
     
     func testGivenCalculHasNumberOnly_WhenAddingOperator_ThenOperatorIsAppendedOnly(){
-        calculator.calculText = "5"
+        setCalculExpression("5")
+        
         calculator.addOperator("-")
         XCTAssert(calculator.calculText == "5 - ")
     }
     
     func testGivenCalculFinishesWithOperator_WhenAddingOperator_ThenOperatorIsNotAdded(){
-        calculator.calculText = "5 - "
+        setCalculExpression("5 - ")
+        
         calculator.addOperator("-")
         XCTAssert(calculator.calculText == "5 - ")
     }
     
     func testPreviousResultIsAvailable_WhenAddingOperator_ThenCalculHasPreviousResultAndOpertor(){
-        calculator.calculText = "2 + 2 = 4"
+        setCalculExpression("2 + 2")
+        calculator.calculResult()
+        
         calculator.addOperator("-")
         XCTAssert(calculator.calculText == "4 - ")
     }
     
     // MARK: - Tests for calculResult
     
-    func testGivenCalculIsEmpty_WhenResultIsRequested_ThenResultIsZero(){
-        calculator.calculText = ""
+    func testGivenCalculIsEmpty_WhenResultIsRequested_ThenResultIsEmpty(){
         calculator.calculResult()
         XCTAssert(calculator.calculText == "")
     }
     
     func testGivenElementsCountsIsNotEnough_WhenResultIsRequested_ThenResultIsNotProcessed(){
-        calculator.calculText = "2 + "
+        setCalculExpression("2 + ")
+        
         calculator.calculResult()
         XCTAssert(calculator.calculText == "2 + ")
     }
     
     func testGivenCalculIsValidAddition_WhenResultIsRequested_ThenResultIsCorrect(){
-        calculator.calculText = "2 + 2"
+        setCalculExpression("2 + 2")
+        
         calculator.calculResult()
         XCTAssert(calculator.calculText == "2 + 2 = 4")
     }
     
     func testGivenCalculIsValidSubstraction_WhenResultIsRequested_ThenResultIsCorrect(){
-        calculator.calculText = "4 - 2"
+        setCalculExpression("4 - 2")
+        
         calculator.calculResult()
         XCTAssert(calculator.calculText == "4 - 2 = 2")
     }
     
+    func testGivenCalculHasResultAlready_WhenResultIsRequested_ResultIsNotProcessedOnceAgain(){
+        setCalculExpression("4 - 2")
+        calculator.calculResult()
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "4 - 2 = 2")
+    }
+    
+    func testGivenCalculWithSeveralAddition_WhenResultIsRequested_ResultIsCorrect(){
+    }
+    
     // MARK: - Tests related to division
     func testGivenElementOneIsGreaterThanElementTwo_WhenDivision_ThenResultIsCorrect(){
-        calculator.calculText = "8 ÷ 2"
+        setCalculExpression("8 ÷ 2")
+        
         calculator.calculResult()
         XCTAssert(calculator.calculText == "8 ÷ 2 = 4")
     }
     
     func testGivenElementTwoIsGreaterThanElementOne_WhenDivision_ThenResultIsCorrect(){
-        calculator.calculText = "4 ÷ 8"
+        setCalculExpression("4 ÷ 8")
+        
         calculator.calculResult()
         XCTAssert(calculator.calculText == "4 ÷ 8 = 0.5")
     }
     
     func testGivenElementTwoIsZero_WhenDivision_ThenResultIsNotProcesses(){
-        calculator.calculText = "4 ÷ 0"
+        setCalculExpression("4 ÷ 0")
+        
         calculator.calculResult()
         XCTAssert(calculator.calculText == "4 ÷ 0")
     }
     
+    
+    // MARK: - Tests related to multiplication
+    
+    func testGivenCalculIsValidWithTwoItems_WhenMultiplication_ThenResultIsCorrect(){
+        setCalculExpression("4 x 2")
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "4 x 2 = 8")
+    }
+    
+    // MARK: - Tests related to calcul reset
+    
+    func testGivenCalculIsNotEmpty_WhenReset_CalculIsEmpty(){
+        setCalculExpression("4 ÷ 0")
+        
+        calculator.resetCalcul()
+        XCTAssert(calculator.calculText == "0")
+    }
+    
 }
+
+
+
+

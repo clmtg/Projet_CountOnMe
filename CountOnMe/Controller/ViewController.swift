@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         core.delegate = self
+        core.resetCalcul()
     }
     
     // MARK: - IBAction
@@ -47,6 +48,10 @@ class ViewController: UIViewController {
 
     @IBAction func tappedEqualButton(_ sender: UIButton) {
         core.calculResult()
+    }
+    
+    @IBAction func tappedACButton(_ sender: UIButton) {
+        core.resetCalcul()
     }
 }
 
