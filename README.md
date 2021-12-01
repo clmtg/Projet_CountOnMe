@@ -4,7 +4,7 @@ Have you ever thought that calculators are boring ?! Time where despite using on
 With the CountOnMe project, you'll feel the nostalgia of an old fashion calculator, directly right out of your pocket.  
 2021, time to be old school again.
 
-![](./screenshotReadmeMD.png)
+![](./screenshotReadmeMD.jpeg)
 
 ## Additional information
 - Support of **iPhone SE to iPhone 13 Pro Max**
