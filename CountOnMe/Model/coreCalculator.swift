@@ -38,7 +38,7 @@ class coreCalculator {
     
     // Can an operation (+/-) be added at the end of the current calcul expression ? Does the current calcul finish with +/- already ?
     var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
     }
     
     // Did the calcul expression provide a result ?
