@@ -26,6 +26,7 @@ class coreCalculatorTest: XCTestCase {
         calculator = coreCalculator()
     }
     
+    
     private func setCalculExpression(_ calculToSet: String){
         let elements = calculToSet.split(separator: " ").map { "\($0)" }
         let digitsCharacters = CharacterSet.decimalDigits
