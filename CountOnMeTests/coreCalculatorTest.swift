@@ -183,11 +183,63 @@ class coreCalculatorTest: XCTestCase {
     
     // MARK: - Tests related to calcul reset
     
-    func testGivenCalculIsNotEmpty_WhenReset_CalculIsEmpty(){
+    func testGivenCalculIsNotEmpty_WhenDividPerZero_CalculIsNotProcessed(){
         setCalculExpression("4 ÷ 0")
         
         calculator.resetCalcul()
         XCTAssert(calculator.calculText == "0")
+    }
+    
+    // MARK: - Tests related to multiple operator
+    
+    func testGivenExpressionHasMultipleAdditionOnly_WhenCalculate_CalculProcessed(){
+        setCalculExpression("4 + 3 + 2")
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "4 + 3 + 2 = 9")
+    }
+    
+    func testGivenExpressionHasMultipleSubstractionOnly_WhenCalculate_CalculProcessed(){
+        setCalculExpression("4 - 3 - 2")
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "4 - 3 - 2 = -1")
+    }
+    
+    func testGivenExpressionHasMultipleMultiplicateOnly_WhenCalculate_CalculProcessed(){
+        setCalculExpression("4 x 3 x 2")
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "4 x 3 x 2 = 24")
+    }
+    
+    func testGivenExpressionHasMultipleDivisionOnly_WhenCalculate_CalculProcessed(){
+        setCalculExpression("4 ÷ 3 ÷ 2")
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "4 ÷ 3 ÷ 2 = 0.66")
+    }
+    
+    func testGivenExpressionHasAdditionAndMultiplication_WhenCalculate_CalculProcessed(){
+        setCalculExpression("4 + 3 x 2")
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText != "4 + 3 x 2 = 14")
+        XCTAssert(calculator.calculText == "4 + 3 x 2 = 10")
+    }
+    
+    func testManoMano(){
+        setCalculExpression("1 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2")
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "1 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2 = 37")
+    }
+    
+    func testManoMano2(){
+        setCalculExpression("1 x 2 x 3 x 5 ÷ 9")
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "1 x 2 x 3 x 5 ÷ 9 = 3.33")
     }
     
 }

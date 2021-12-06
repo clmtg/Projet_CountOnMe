@@ -51,6 +51,14 @@ class coreCalculator {
         return calculText.firstIndex(of: "=") != nil
     }
     
+    //Convertor used to have number to correct format ("2 + 2 = 4" -> Correct. "2 + 2 = 4.0" -> Wrong. )
+    private var resultIntDoubleCheck: NumberFormatter = {
+        let numberConvertor = NumberFormatter()
+        numberConvertor.minimumIntegerDigits = 1
+        numberConvertor.maximumFractionDigits = 2
+        return numberConvertor
+    }()
+    
     // MARK: - Functions
     
     //Func to add a number to current calcul. If the calcul does have a result already, clearing calcul expression
@@ -100,11 +108,17 @@ class coreCalculator {
         // Create local copy of operations
         var operationsToReduce = elements
         
+        
+        
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
-            let left = Double(operationsToReduce[0])!
-            let operand = operationsToReduce[1]
-            let right = Double(operationsToReduce[2])!
+            
+            let operatorToProcees = getMostImportantOperatorIndex(operationsToReduce)
+            
+            let left = Double(operationsToReduce[operatorToProcees - 1])!
+            let operand = operationsToReduce[operatorToProcees]
+            let right = Double(operationsToReduce[operatorToProcees + 1])!
+            
             
             let result: Double
             switch operand {
@@ -122,9 +136,10 @@ class coreCalculator {
             default: fatalError("Unknown operator !")
             }
             
-
-            operationsToReduce = Array(operationsToReduce.dropFirst(3))
-            operationsToReduce.insert("\(resultIntDoubleCheck.string(from: NSNumber(value: result))!)", at: 0)
+            operationsToReduce.remove(at: operatorToProcees+1)
+            operationsToReduce.remove(at: operatorToProcees)
+            operationsToReduce.remove(at: operatorToProcees-1)
+            operationsToReduce.insert("\(resultIntDoubleCheck.string(from: NSNumber(value: result))!)", at: operatorToProcees-1)
             
         }
         
@@ -132,15 +147,19 @@ class coreCalculator {
         
     }
     
+    //Reset calculator
     func resetCalcul(){
         calculText = "0"
     }
     
-    //Function to convert number to correct format ("2 + 2 = 4" -> Correct. "2 + 2 = 4.0" -> Wrong. )
-    private var resultIntDoubleCheck: NumberFormatter = {
-        let numberConvertor = NumberFormatter()
-        numberConvertor.minimumIntegerDigits = 1
-        numberConvertor.maximumFractionDigits = 2
-        return numberConvertor
-    }()
+    //Return the index of the most important operator x and ÷ are more important than + and -
+    private func getMostImportantOperatorIndex(_ expression: [String]) -> Int{
+        if expression.contains("x") {
+            return expression.firstIndex(of: "x")!
+        }
+        else if expression.contains("÷"){
+            return expression.firstIndex(of: "÷")!
+        }
+        return 1
+    }
 }
