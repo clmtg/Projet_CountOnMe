@@ -228,20 +228,26 @@ class coreCalculatorTest: XCTestCase {
         XCTAssert(calculator.calculText == "4 + 3 x 2 = 10")
     }
     
-    func testManoMano(){
-        setCalculExpression("1 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2")
+    func testGivenExpressionHasAdditionAndDivision_WhenCalculate_CalculProcessed(){
+        setCalculExpression("4 + 3 ÷ 2")
         
         calculator.calculResult()
-        XCTAssert(calculator.calculText == "1 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2 + 3 x 2 = 37")
+        XCTAssert(calculator.calculText == "4 + 3 ÷ 2 = 5.5")
     }
     
-    func testManoMano2(){
-        setCalculExpression("1 x 2 x 3 x 5 ÷ 9")
+    func testGivenExpressionHasMultiplicationAndDivision_WhenCalculate_CalculProcessed(){
+        setCalculExpression("4 x 3 ÷ 2")
         
         calculator.calculResult()
-        XCTAssert(calculator.calculText == "1 x 2 x 3 x 5 ÷ 9 = 3.33")
+        XCTAssert(calculator.calculText == "4 x 3 ÷ 2 = 6")
     }
     
+    func testGivenExpressionHasMultiplicationAndDivisionPerZero_WhenCalculate_CalculProcessed(){
+        setCalculExpression("4 x 3 ÷ 0")
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "4 x 3 ÷ 0")
+    }
 }
 
 

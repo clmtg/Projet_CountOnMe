@@ -11,44 +11,36 @@ import Foundation
 class coreCalculator {
     
     // MARK: - Var
-    // Calcul done by the model
+
+    /// Calcul expression done by the model
     var calculText: String = "" {
         didSet {
             delegate?.receiveResult(calculText)
         }
     }
     
-    //Use to link the model and the view
+    /// Used to link controller and model
     weak var delegate: CalculatorDelegate?
     
-    //Items making calcul ("4 + 5" (3 items))
+    /// Array elements making calcul expression. E.g. : "5 + 6" 3 elements ("5" "+" "6")
     var elements: [String] {
         return calculText.split(separator: " ").map { "\($0)" }
     }
     
-    // Error check computed variables - Does the current calcul ends by + or - ?
+    
+    /// Flag to check if calcul expression ends with an operator. False means calcul expression is incomplete
     var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
     }
     
-    // Does calcul expression have at least 3 items
+    /// Flag to check if calcul expression does have at least 2 numbers and 1 operator. True means calcul expression has at least 3 elements
     var expressionHaveEnoughElement: Bool {
         return elements.count >= 3
     }
     
-    // Does calcul expression have at least 3 items
+    /// Flag to check if calcul expression does contain a result already
     var expressionHasResult: Bool {
         return calculText.contains("=")
-    }
-    
-    // Can an operation (+/-) be added at the end of the current calcul expression ? Does the current calcul finish with +/- already ?
-    var canAddOperator: Bool {
-        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
-    }
-    
-    // Did the calcul expression provide a result ?
-    var expressionHaveResult: Bool {
-        return calculText.firstIndex(of: "=") != nil
     }
     
     //Convertor used to have number to correct format ("2 + 2 = 4" -> Correct. "2 + 2 = 4.0" -> Wrong. )
@@ -58,12 +50,12 @@ class coreCalculator {
         numberConvertor.maximumFractionDigits = 2
         return numberConvertor
     }()
-    
+
     // MARK: - Functions
     
     //Func to add a number to current calcul. If the calcul does have a result already, clearing calcul expression
     func addNumberToCalcul(_ number: String){
-        if expressionHaveResult {
+        if expressionHasResult {
             resetCalcul()
         }
         
@@ -76,12 +68,12 @@ class coreCalculator {
     
     //Func to add operator to calcul expression
     func addOperator(_ operatorCalcul: String) {
-        if !canAddOperator {
+        if !expressionIsCorrect {
             delegate?.receiveAlert("Operator error", "The operator \(operatorCalcul) can't be added here")
             return
         }
 
-        if expressionHaveResult {
+        if expressionHasResult {
             calculText = elements.last!
         }
         
