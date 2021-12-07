@@ -181,6 +181,24 @@ class coreCalculatorTest: XCTestCase {
         XCTAssert(calculator.calculText == "4 x 2 = 8")
     }
     
+    func testGivenCalculIsEmpty_WhenStartedWithMultiplicationAndProcess_ThenResultIsCorrect(){
+        setCalculExpression("0")
+        
+        calculator.addOperator("x")
+        calculator.addNumberToCalcul("2")
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "1 x 2 = 2")
+    }
+    
+    func testGivenCalculIsEmpty_WhenStartedWithDivisionAndProcess_ThenResultIsCorrect(){
+        setCalculExpression("0")
+        
+        calculator.addOperator("÷")
+        calculator.addNumberToCalcul("2")
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "1 ÷ 2 = 0.5")
+    }
+    
     // MARK: - Tests related to calcul reset
     
     func testGivenCalculIsNotEmpty_WhenDividPerZero_CalculIsNotProcessed(){

@@ -43,7 +43,7 @@ class coreCalculator {
         return calculText.contains("=")
     }
     
-    //Convertor used to have number to correct format ("2 + 2 = 4" -> Correct. "2 + 2 = 4.0" -> Wrong. )
+    /// Convertor used to have number to correct format ("2 + 2 = 4" -> Correct. "2 + 2 = 4.0" -> Wrong. )
     private var resultIntDoubleCheck: NumberFormatter = {
         let numberConvertor = NumberFormatter()
         numberConvertor.minimumIntegerDigits = 1
@@ -53,34 +53,41 @@ class coreCalculator {
 
     // MARK: - Functions
     
-    //Func to add a number to current calcul. If the calcul does have a result already, clearing calcul expression
+    /// Func to add a number to current calcul. If the calcul does have a result already,  calcul expression is cleared first
+    /// - Parameter number: Number to add to the calcul expression
     func addNumberToCalcul(_ number: String){
         if expressionHasResult {
             resetCalcul()
         }
-        
         if calculText == "0" {
             calculText = ""
         }
-        
         calculText.append(number)
     }
     
-    //Func to add operator to calcul expression
+    /// Func to add an operator to calcul expression
+    /// - Parameter operatorCalcul: Operator to add to the calcul expression
     func addOperator(_ operatorCalcul: String) {
         if !expressionIsCorrect {
             delegate?.receiveAlert("Operator error", "The operator \(operatorCalcul) can't be added here")
             return
         }
-
+        
         if expressionHasResult {
             calculText = elements.last!
+        }
+        
+        if calculText == "0" {
+            if operatorCalcul == "x" || operatorCalcul == "÷"  {
+                calculText = "1"
+            }
         }
         
         calculText.append(" \(operatorCalcul) ")
     }
     
-    //Func to provide result
+    //
+    /// Func to calcul result from calcul expression input by the user. It does check if the input is correct and if a result has been provided already.
     func calculResult() {
         if !expressionIsCorrect {
             delegate?.receiveAlert("Result error", "The calcul expression is invalide. Please make sure to enter a valid calcul.")
@@ -100,17 +107,12 @@ class coreCalculator {
         // Create local copy of operations
         var operationsToReduce = elements
         
-        
-        
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
-            
             let operatorToProcees = getMostImportantOperatorIndex(operationsToReduce)
-            
             let left = Double(operationsToReduce[operatorToProcees - 1])!
             let operand = operationsToReduce[operatorToProcees]
             let right = Double(operationsToReduce[operatorToProcees + 1])!
-            
             
             let result: Double
             switch operand {
@@ -132,19 +134,19 @@ class coreCalculator {
             operationsToReduce.remove(at: operatorToProcees)
             operationsToReduce.remove(at: operatorToProcees-1)
             operationsToReduce.insert("\(resultIntDoubleCheck.string(from: NSNumber(value: result))!)", at: operatorToProcees-1)
-            
         }
         
         calculText.append(" = \(operationsToReduce.first!)")
-        
     }
     
-    //Reset calculator
+    /// Function to reset calcul expression. This set the calcul expression to "0". Also used when "AC" button is tapped
     func resetCalcul(){
         calculText = "0"
     }
     
-    //Return the index of the most important operator x and ÷ are more important than + and -
+    /// Return the index of the most important operator. x and ÷ are more important than + and -. If there aren't "x" or "÷", 1 is returned as it should be the index of the first operator.
+    /// - Parameter expression: Array of elements making the calcul expression. E.g. : "5 + 6" 3 elements ("5" "+" "6")
+    /// - Returns: The operator index that must be handled first. (x or ÷). Otherwise returns 1
     private func getMostImportantOperatorIndex(_ expression: [String]) -> Int{
         if expression.contains("x") {
             return expression.firstIndex(of: "x")!
