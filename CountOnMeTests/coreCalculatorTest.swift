@@ -267,6 +267,13 @@ class coreCalculatorTest: XCTestCase {
         XCTAssert(calculator.calculText == "4 x 3 ÷ 0")
     }
     
+    func testGivenExpressionHasDivisionFirst_WhenFollowMulti_CalculProcessed(){
+        setCalculExpression("18 ÷ 6 x 3")
+        
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "18 ÷ 6 x 3 = 9")
+    }
+    
     // MARK: - Tests related to the dot
     
     func testGivenCalculIsEmpty_WhenAddADot_ThenZeroIsKekpt(){
@@ -300,17 +307,11 @@ class coreCalculatorTest: XCTestCase {
         XCTAssert(calculator.calculText == "4 + 0.")
     }
     
-    
-    
-    
-    
-    /*
     func testGivenCalculFinishWithDot_WhenResultIsRequested_ThenResultNotProcess(){
         setCalculExpression("4 x ")
         calculator.addNumberToCalcul(".")
 
         calculator.calculResult()
-        XCTAssert(calculator.calculText == "4 x .")
+        XCTAssert(calculator.calculText == "4 x 0.")
     }
-     */
 }

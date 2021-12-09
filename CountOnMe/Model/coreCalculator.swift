@@ -170,13 +170,23 @@ class coreCalculator {
     /// Return the index of the most important operator. x and ÷ are more important than + and -. If there aren't "x" or "÷", 1 is returned as it should be the index of the first operator.
     /// - Parameter expression: Array of elements making the calcul expression. E.g. : "5 + 6" 3 elements ("5" "+" "6")
     /// - Returns: The operator index that must be handled first. (x or ÷). Otherwise returns 1
-    private func getMostImportantOperatorIndex(_ expression: [String]) -> Int{
+    private func getMostImportantOperatorIndex(_ expression: [String]) -> Int {
+        
+        var indexMulti = 999999
+        var indexDivision = 999999
+        
         if expression.contains("x") {
-            return expression.firstIndex(of: "x")!
+            indexMulti = expression.firstIndex(of: "x")!
         }
-        else if expression.contains("÷"){
-            return expression.firstIndex(of: "÷")!
+        
+        if expression.contains("÷") {
+            indexDivision = expression.firstIndex(of: "÷")!
         }
-        return 1
+        
+        if indexMulti == indexDivision {
+            return 1
+        }
+        
+        return min(indexMulti, indexDivision)
     }
 }
