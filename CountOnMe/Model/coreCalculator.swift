@@ -30,7 +30,7 @@ class coreCalculator {
     
     /// Flag to check if calcul expression ends with an operator. False means calcul expression is incomplete
     var expressionIsCorrect: Bool {
-        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
+        return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷" && elements.last?.last != "."
     }
     
     /// Flag to check if calcul expression does have at least 2 numbers and 1 operator. True means calcul expression has at least 3 elements
@@ -43,6 +43,14 @@ class coreCalculator {
         return calculText.contains("=")
     }
     
+    /// Flag to check if calcul expression does contain a result already
+    var lastValueHasDot: Bool {
+        if elements.count > 0 {
+            return elements.last!.contains(".")
+        }
+        return false
+    }
+    
     /// Convertor used to have number to correct format ("2 + 2 = 4" -> Correct. "2 + 2 = 4.0" -> Wrong. )
     private var resultIntDoubleCheck: NumberFormatter = {
         let numberConvertor = NumberFormatter()
@@ -51,17 +59,34 @@ class coreCalculator {
         return numberConvertor
     }()
 
+    /// List of operator used by the coreCalculator
+    let operatorList = ["+", "-", "x", "÷"]
+
     // MARK: - Functions
     
     /// Func to add a number to current calcul. If the calcul does have a result already,  calcul expression is cleared first
     /// - Parameter number: Number to add to the calcul expression
     func addNumberToCalcul(_ number: String){
+        
         if expressionHasResult {
             resetCalcul()
         }
-        if calculText == "0" {
+        
+        if calculText == "0" && number != "."{
             calculText = ""
         }
+
+        if number == "." {
+            if lastValueHasDot {
+                delegate?.receiveAlert("Number error", "This number is a decimal number already")
+                return
+            }
+            
+            if operatorList.contains(elements.last!){
+                addNumberToCalcul("0")
+            }
+        }
+        
         calculText.append(number)
     }
     
@@ -82,11 +107,9 @@ class coreCalculator {
                 calculText = "1"
             }
         }
-        
         calculText.append(" \(operatorCalcul) ")
     }
     
-    //
     /// Func to calcul result from calcul expression input by the user. It does check if the input is correct and if a result has been provided already.
     func calculResult() {
         if !expressionIsCorrect {

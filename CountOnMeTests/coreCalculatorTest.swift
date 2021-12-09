@@ -266,8 +266,51 @@ class coreCalculatorTest: XCTestCase {
         calculator.calculResult()
         XCTAssert(calculator.calculText == "4 x 3 ÷ 0")
     }
+    
+    // MARK: - Tests related to the dot
+    
+    func testGivenCalculIsEmpty_WhenAddADot_ThenZeroIsKekpt(){
+        setCalculExpression("0")
+
+        calculator.addNumberToCalcul(".")
+        XCTAssert(calculator.calculText == "0.")
+    }
+    
+    func testGivenCalculFinishWithDot_WhenAddADot_ThenCalculIsNotChanged(){
+        setCalculExpression("5")
+        calculator.addNumberToCalcul(".")
+
+        calculator.addNumberToCalcul(".")
+        XCTAssert(calculator.calculText == "5.")
+    }
+    
+    func testGivenCalculFinishWithDot_WhenAddAdOperator_ThenOperatorIsNotAdded(){
+        setCalculExpression("5")
+        calculator.addNumberToCalcul(".")
+
+        calculator.addOperator("+")
+        XCTAssert(calculator.calculText == "5.")
+    }
+    
+    func testGivenCalculFinishWithOperator_WhenAddDot_ThenZeroIsAddedToLastNumber(){
+        calculator.addNumberToCalcul("4")
+        calculator.addOperator("+")
+        calculator.addNumberToCalcul(".")
+
+        XCTAssert(calculator.calculText == "4 + 0.")
+    }
+    
+    
+    
+    
+    
+    /*
+    func testGivenCalculFinishWithDot_WhenResultIsRequested_ThenResultNotProcess(){
+        setCalculExpression("4 x ")
+        calculator.addNumberToCalcul(".")
+
+        calculator.calculResult()
+        XCTAssert(calculator.calculText == "4 x .")
+    }
+     */
 }
-
-
-
-
