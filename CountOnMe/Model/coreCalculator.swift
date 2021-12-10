@@ -27,7 +27,6 @@ class coreCalculator {
         return calculText.split(separator: " ").map { "\($0)" }
     }
     
-    
     /// Flag to check if calcul expression ends with an operator. False means calcul expression is incomplete
     var expressionIsCorrect: Bool {
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷" && elements.last?.last != "."
@@ -172,20 +171,19 @@ class coreCalculator {
     /// - Returns: The operator index that must be handled first. (x or ÷). Otherwise returns 1
     private func getMostImportantOperatorIndex(_ expression: [String]) -> Int {
         
-        var indexMulti = 999999
-        var indexDivision = 999999
-        
-        if expression.contains("x") {
-            indexMulti = expression.firstIndex(of: "x")!
-        }
-        
-        if expression.contains("÷") {
-            indexDivision = expression.firstIndex(of: "÷")!
-        }
-        
-        if indexMulti == indexDivision {
+        let indexMulti = expression.firstIndex(of: "x")
+        let indexDivision = expression.firstIndex(of: "÷")
+                
+        if indexMulti == nil && indexDivision == nil {
             return 1
         }
-        return min(indexMulti, indexDivision)
+        else if indexMulti == nil {
+            return indexDivision!
+        }
+        else if indexDivision == nil {
+            return indexMulti!
+        } else {
+            return min(indexMulti!, indexDivision!)
+        }
     }
 }
