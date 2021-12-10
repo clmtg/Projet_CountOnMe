@@ -186,7 +186,6 @@ class coreCalculator {
         if indexMulti == indexDivision {
             return 1
         }
-        
         return min(indexMulti, indexDivision)
     }
 }
