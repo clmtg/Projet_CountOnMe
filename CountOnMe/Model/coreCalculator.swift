@@ -126,64 +126,66 @@ class coreCalculator {
             return
         }
         
+        if  let index = elements.firstIndex(where: { $0 == "÷" }) {
+            if Double(elements[index+1]) == 0.0 {
+                delegate?.receiveAlert("Division error", "Unable to process a division per 0")
+                return
+            }
+        }
+
         // Create local copy of operations
-        var operationsToReduce = elements
-        
+        var operationsToReduce = priorityOperator(elements)
+
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
-            let operatorToProcees = getMostImportantOperatorIndex(operationsToReduce)
-            let left = Double(operationsToReduce[operatorToProcees - 1])!
-            let operand = operationsToReduce[operatorToProcees]
-            let right = Double(operationsToReduce[operatorToProcees + 1])!
+            let left = Double(operationsToReduce[0])!
+            let operand = operationsToReduce[1]
+            let right = Double(operationsToReduce[2])!
             
             let result: Double
+            
             switch operand {
             case "+": result = left + right
             case "-": result = left - right
-            case "x": result = left * right
-            case "÷":
-                if right == 0 {
-                    delegate?.receiveAlert("Calcul error", "Can not process a division by zero.")
-                    return
-                }
-                else {
-                    result = left / right
-                }
             default: fatalError("Unknown operator !")
             }
             
-            operationsToReduce.remove(at: operatorToProcees+1)
-            operationsToReduce.remove(at: operatorToProcees)
-            operationsToReduce.remove(at: operatorToProcees-1)
-            operationsToReduce.insert("\(resultIntDoubleCheck.string(from: NSNumber(value: result))!)", at: operatorToProcees-1)
+            operationsToReduce = Array(operationsToReduce.dropFirst(3))
+            operationsToReduce.insert("\(resultIntDoubleCheck.string(from: NSNumber(value: result))!)", at: 0)
         }
         
         calculText.append(" = \(operationsToReduce.first!)")
     }
     
+    /// Function to process most important operator first (x and ÷)
+    /// - Parameter elements: Array of elements making the calcul expression. E.g. : "5 + 6" 3 elements ("5" "+" "6")
+    /// - Returns: Array of elements making the calcul expression updated. Having only addition and substraction
+    func priorityOperator(_ elements : [String]) -> [String]{
+        var tempElements = elements
+        
+        while tempElements.contains("x") || tempElements.contains("÷") {
+            if  let index = tempElements.firstIndex(where: { $0 == "x" || $0 == "÷" }) {
+                let mathOperator = tempElements[index]
+                guard let left = Double(tempElements[index-1]) else { return [] }
+                guard let right = Double(tempElements[index+1]) else { return [] }
+                
+                /**
+                if mathOperator == "÷" && right == 0.0 {
+                    return ["0"]
+                }
+                 */
+                
+                let result: Double = mathOperator == "x" ? left * right : left / right
+                tempElements[index-1] = resultIntDoubleCheck.string(from: NSNumber(value: result))!
+                tempElements.remove(at: index+1)
+                tempElements.remove(at: index)
+            }
+        }
+        return tempElements
+    }
+    
     /// Function to reset calcul expression. This set the calcul expression to "0". Also used when "AC" button is tapped
     func resetCalcul(){
         calculText = "0"
-    }
-    
-    /// Return the index of the most important operator. x and ÷ are more important than + and -. If there aren't "x" or "÷", 1 is returned as it should be the index of the first operator.
-    /// - Parameter expression: Array of elements making the calcul expression. E.g. : "5 + 6" 3 elements ("5" "+" "6")
-    /// - Returns: The operator index that must be handled first. (x or ÷). Otherwise returns 1
-    private func getMostImportantOperatorIndex(_ expression: [String]) -> Int {
-        
-        let indexMulti = expression.firstIndex(of: "x")
-        let indexDivision = expression.firstIndex(of: "÷")
-                
-        if indexMulti == nil && indexDivision == nil {
-            return 1
-        }
-        else if indexMulti == nil {
-            return indexDivision!
-        }
-        else if indexDivision == nil {
-            return indexMulti!
-        } else {
-            return min(indexMulti!, indexDivision!)
-        }
     }
 }
