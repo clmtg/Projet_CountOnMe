@@ -29,6 +29,7 @@ class coreCalculator {
     
     /// Flag to check if calcul expression ends with an operator. False means calcul expression is incomplete
     var expressionIsCorrect: Bool {
+
         return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷" && elements.last?.last != "."
     }
     
@@ -57,9 +58,9 @@ class coreCalculator {
         numberConvertor.maximumFractionDigits = 2
         return numberConvertor
     }()
-
+    
     /// List of operator used by the coreCalculator
-    let operatorList = ["+", "-", "x", "÷"]
+        let operatorList = ["+", "-", "x", "÷"]
 
     // MARK: - Functions
     
@@ -147,7 +148,7 @@ class coreCalculator {
             switch operand {
             case "+": result = left + right
             case "-": result = left - right
-            default: fatalError("Unknown operator !")
+            default: return
             }
             
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
@@ -168,12 +169,6 @@ class coreCalculator {
                 let mathOperator = tempElements[index]
                 guard let left = Double(tempElements[index-1]) else { return [] }
                 guard let right = Double(tempElements[index+1]) else { return [] }
-                
-                /**
-                if mathOperator == "÷" && right == 0.0 {
-                    return ["0"]
-                }
-                 */
                 
                 let result: Double = mathOperator == "x" ? left * right : left / right
                 tempElements[index-1] = resultIntDoubleCheck.string(from: NSNumber(value: result))!

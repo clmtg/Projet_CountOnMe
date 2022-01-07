@@ -6,13 +6,6 @@
 //  Copyright © 2021 Vincent Saluzzo. All rights reserved.
 //
 
-/*
- GivenPostHasZeroLike_WhenPostIsLiked_ThenPostHasOneLike
- // ETANT DONNÉ QUE le poste n'a pas de like
- // QUAND le poste est liké
- // ALORS le poste a un like
- */
-
 import XCTest
 @testable import CountOnMe
 
@@ -273,6 +266,8 @@ class coreCalculatorTest: XCTestCase {
         calculator.calculResult()
         XCTAssert(calculator.calculText == "18 ÷ 6 x 3 = 9")
     }
+    
+    
     
     // MARK: - Tests related to the dot
     
